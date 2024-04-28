@@ -1,0 +1,19 @@
+{
+  "name": "ifnos",
+  "description": "If not now, then when?",
+  "version": "0.0.0",
+  "author": "YongJun Kim <staysharp0@gmail.com>",
+  "keywords": [],
+  "license": "MIT",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=20.12.2",
+    "pnpm": ">=9.0.6"
+  },
+  "devDependencies": {
+    "pnpm": "^9.0.6"
+  }
+}
