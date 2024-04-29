@@ -1,0 +1,5 @@
+# Turborepo
+.turbo/
+
+# Dependency directories
+node_modules/
