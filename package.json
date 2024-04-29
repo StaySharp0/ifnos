@@ -1,0 +1,22 @@
+{
+  "name": "ifnos",
+  "version": "0.1.0",
+  "description": "If not now, then when?",
+  "author": "YongJun Kim <staysharp0@gmail.com>",
+  "keywords": [],
+  "license": "MIT",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=20.12.2",
+    "pnpm": ">=8.9.0"
+  },
+  "devDependencies": {
+    "turbo": "latest"
+  }
+}
