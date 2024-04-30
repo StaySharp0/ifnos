@@ -6,7 +6,7 @@
   "keywords": [],
   "license": "MIT",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "sb": "turbo run sb:compose --parallel"
   },
   "workspaces": [
     "apps/*",

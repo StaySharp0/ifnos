@@ -10,6 +10,11 @@ function getAbsolutePath(value: string): any {
   return dirname(require.resolve(join(value, "package.json")));
 }
 
+const {
+  env: { NODE_ENV, UI_STORYBOOK_PORT },
+} = process;
+const isDev = NODE_ENV === "development";
+
 const config: StorybookConfig = {
   stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
   addons: [
@@ -26,6 +31,12 @@ const config: StorybookConfig = {
   },
   docs: {
     autodocs: "tag",
+  },
+  refs: {
+    ui: {
+      title: "UI",
+      url: isDev ? `http://localhost:${UI_STORYBOOK_PORT}` : "ui/",
+    },
   },
   webpackFinal: async (config) => {
     if (config.resolve) {
