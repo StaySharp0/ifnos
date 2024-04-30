@@ -3,3 +3,13 @@
 
 # Dependency directories
 node_modules/
+
+# Build output
+dist/
+storybook-static/
+
+# Environment variable files
+*.local
+
+# Log
+*storybook.log
