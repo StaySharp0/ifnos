@@ -1,6 +1,6 @@
 import type { StorybookConfig } from "@storybook/react-webpack5";
 
-import { join, dirname } from "path";
+import path, { join, dirname } from "path";
 
 /**
  * This function is used to resolve the absolute path of a package.
@@ -26,6 +26,16 @@ const config: StorybookConfig = {
   },
   docs: {
     autodocs: "tag",
+  },
+  webpackFinal: async (config) => {
+    if (config.resolve) {
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        "@": path.resolve(__dirname, "../src"),
+      };
+    }
+
+    return config;
   },
 };
 
