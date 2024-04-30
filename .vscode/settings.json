@@ -2,6 +2,6 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "files.autoSave": "afterDelay",
-  "cSpell.words": ["ifnos"],
+  "cSpell.words": ["Autodocs", "ifnos"],
   "explorer.compactFolders": false
 }
