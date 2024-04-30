@@ -7,8 +7,9 @@
   },
   "scripts": {
     "build": "webpack --mode=production",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "sb": "dotenv -e ../../.env -- cross-var storybook dev -p %UI_STORYBOOK_PORT%",
+    "sb:compose": "dotenv -e ../../.env -- cross-var storybook dev -p %UI_STORYBOOK_PORT% --no-open",
+    "sb:build": "storybook build"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -31,7 +32,9 @@
     "@types/react-dom": "^18.2.22",
     "@typescript-eslint/eslint-plugin": "^7.8.0",
     "@typescript-eslint/parser": "^7.8.0",
+    "cross-var": "^1.1.0",
     "css-loader": "^7.1.1",
+    "dotenv-cli": "^7.4.1",
     "eslint": "8",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-storybook": "^0.8.0",

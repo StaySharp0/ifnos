@@ -1,3 +1,9 @@
 {
-  "$schema": "https://turbo.build/schema.json"
+  "$schema": "https://turbo.build/schema.json",
+  "globalDotEnv": [".env"],
+  "pipeline": {
+    "sb:compose": {
+      "cache": false
+    }
+  }
 }

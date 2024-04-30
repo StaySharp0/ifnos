@@ -4,13 +4,14 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "sb": "dotenv -e ../../.env -- cross-var storybook dev -p %STORYBOOK_PORT%",
+    "sb:compose": "dotenv -e ../../.env -- cross-var npx wait-on http://localhost:%UI_STORYBOOK_PORT% && dotenv -e ../../.env -- cross-var storybook dev -p %STORYBOOK_PORT%",
+    "sb:build": "storybook build"
   },
   "dependencies": {
+    "@ifnos/ui": "workspace:*",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "@ifnos/ui": "workspace:*"
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^1.3.3",
@@ -29,12 +30,15 @@
     "@types/react-dom": "^18.2.22",
     "@typescript-eslint/eslint-plugin": "^7.8.0",
     "@typescript-eslint/parser": "^7.8.0",
+    "cross-var": "^1.1.0",
     "css-loader": "^7.1.1",
+    "dotenv-cli": "^7.4.1",
     "mini-css-extract-plugin": "^2.9.0",
     "prop-types": "^15.8.1",
     "storybook": "^8.0.9",
     "style-loader": "^4.0.0",
     "swc-loader": "^0.2.6",
+    "wait-on": "^7.2.0",
     "webpack": "^5.91.0",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^5.0.4"
