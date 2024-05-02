@@ -9,7 +9,8 @@
     "build": "webpack --mode=production",
     "sb": "dotenv -e ../../.env -- cross-var storybook dev -p %UI_STORYBOOK_PORT%",
     "sb:compose": "dotenv -e ../../.env -- cross-var storybook dev -p %UI_STORYBOOK_PORT% --no-open",
-    "sb:build": "storybook build"
+    "sb:build": "storybook build --quiet",
+    "sb:move": "mv storybook-static ../../storybook-static/ui"
   },
   "dependencies": {
     "react": "^18.2.0",

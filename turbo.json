@@ -4,6 +4,12 @@
   "pipeline": {
     "sb:compose": {
       "cache": false
+    },
+    "sb:build": {
+      "outputs": ["storybook-static/**"]
+    },
+    "sb:move": {
+      "cache": false
     }
   }
 }
