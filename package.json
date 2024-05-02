@@ -6,7 +6,9 @@
   "keywords": [],
   "license": "MIT",
   "scripts": {
-    "sb": "turbo run sb:compose --parallel"
+    "sb": "turbo run sb:compose --parallel",
+    "sb:build": "turbo run sb:build --parallel && turbo run sb:move --filter=ui-docs && turbo run sb:move --filter=!ui-docs",
+    "sb:static": "dotenv -e .env -- cross-var http-server -c-1 -s -p %STORYBOOK_PORT% -o ./storybook-static"
   },
   "workspaces": [
     "apps/*",
@@ -17,6 +19,9 @@
     "pnpm": ">=8.9.0"
   },
   "devDependencies": {
+    "cross-var": "^1.1.0",
+    "dotenv-cli": "^7.4.1",
+    "http-server": "^14.1.1",
     "turbo": "latest"
   }
 }

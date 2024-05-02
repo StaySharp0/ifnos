@@ -6,7 +6,8 @@
   "scripts": {
     "sb": "dotenv -e ../../.env -- cross-var storybook dev -p %STORYBOOK_PORT%",
     "sb:compose": "dotenv -e ../../.env -- cross-var npx wait-on http://localhost:%UI_STORYBOOK_PORT% && dotenv -e ../../.env -- cross-var storybook dev -p %STORYBOOK_PORT%",
-    "sb:build": "storybook build"
+    "sb:build": "storybook build --quiet",
+    "sb:move": "mv storybook-static ../../storybook-static"
   },
   "dependencies": {
     "@ifnos/ui": "workspace:*",
