@@ -1,14 +1,11 @@
-import "./button.css";
+import { styled } from "@stitches/react";
+import type { VariantProps } from "@stitches/react";
 
 export interface ButtonProps {
   /**
    * Is this the principal call to action on the page?
    */
-  primary?: boolean;
-  /**
-   * What background color to use
-   */
-  backgroundColor?: string;
+  mode?: "primary" | "secondary";
   /**
    * How large should the button be?
    */
@@ -27,25 +24,57 @@ export interface ButtonProps {
  * Primary UI component for user interaction
  */
 export const Button = ({
-  primary = false,
+  mode = "primary",
   size = "medium",
-  backgroundColor,
   label,
   ...props
 }: ButtonProps) => {
-  const mode = primary
-    ? "storybook-button--primary"
-    : "storybook-button--secondary";
   return (
-    <button
-      type="button"
-      className={["storybook-button", `storybook-button--${size}`, mode].join(
-        " "
-      )}
-      style={{ backgroundColor }}
+    <ButtonStyled
+      mode={mode as ButtonStyledVariantsType["mode"]}
+      size={size as ButtonStyledVariantsType["size"]}
       {...props}
     >
       {label}
-    </button>
+    </ButtonStyled>
   );
 };
+
+type ButtonStyledVariantsType = VariantProps<typeof ButtonStyled>;
+
+const ButtonStyled = styled("button", {
+  fontWeight: 700,
+  border: 0,
+  borderRadius: "3em",
+  cursor: "pointer",
+  display: "inline-block",
+  lineHeight: 1,
+
+  variants: {
+    mode: {
+      primary: {
+        color: "white",
+        backgroundColor: "#1ea7fd",
+      },
+      secondary: {
+        color: "#333",
+        backgroundColor: "transparent",
+        boxShadow: "rgba(0, 0, 0, 0.15) 0px 0px 0px 1px inset",
+      },
+    },
+    size: {
+      small: {
+        fontSize: "12px",
+        padding: "10px 16px",
+      },
+      medium: {
+        fontSize: " 14px",
+        padding: "11px 20px",
+      },
+      large: {
+        fontSize: " 16px",
+        padding: "12px 24px",
+      },
+    },
+  },
+});
