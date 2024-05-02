@@ -12,4 +12,7 @@ storybook-static/
 *.local
 
 # Log
+logs
+*.log
+pnpm-debug.log*
 *storybook.log
