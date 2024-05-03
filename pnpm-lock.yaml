@@ -117,6 +117,9 @@ importers:
       webpack-dev-server:
         specifier: ^5.0.4
         version: 5.0.4(webpack-cli@5.1.4)(webpack@5.91.0)
+      webpack-virtual-modules:
+        specifier: ^0.6.1
+        version: 0.6.1
 
   packages/stitches-ui:
     dependencies:
