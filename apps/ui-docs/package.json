@@ -7,7 +7,7 @@
     "sb": "dotenv -e ../../.env -- cross-var storybook dev -p %SB_PORT%",
     "sb:compose": "dotenv -e ../../.env -- cross-var npx wait-on http://localhost:%STITCHES_UI_SB_PORT% && dotenv -e ../../.env -- cross-var storybook dev -p %SB_PORT%",
     "sb:build": "storybook build --quiet",
-    "sb:move": "mv storybook-static ../../storybook-static"
+    "sb:move": "rm -rf ../../storybook-static && mv storybook-static ../../storybook-static"
   },
   "dependencies": {
     "@ifnos/stitches-ui": "workspace:*",
