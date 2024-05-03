@@ -35,7 +35,7 @@ const config: StorybookConfig = {
   refs: {
     "stitches-ui": {
       title: "stitches-ui",
-      url: isDev ? `http://localhost:${STITCHES_UI_SB_PORT}` : "/",
+      url: isDev ? `http://localhost:${STITCHES_UI_SB_PORT}` : "/stitches-ui",
     },
   },
   webpackFinal: async (config) => {

@@ -8,7 +8,7 @@
   "scripts": {
     "sb": "turbo run sb:compose --parallel",
     "sb:build": "turbo run sb:build --parallel && turbo run sb:move --filter=ui-docs && turbo run sb:move --filter=!ui-docs",
-    "sb:static": "dotenv -e .env -- cross-var http-server -c-1 -s -p %SB_PORT% -o ./storybook-static"
+    "sb:static": "cd ./storybook-static && dotenv -e ../.env -- cross-var http-server -c-1 -s -p %SB_PORT% -o ./"
   },
   "workspaces": [
     "apps/*",
