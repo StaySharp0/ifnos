@@ -1,33 +1,31 @@
 const path = require("path");
-
-const { ProgressPlugin } = require("webpack");
+const { ProgressPlugin, container } = require("webpack");
 const ESLintPlugin = require("eslint-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
-module.exports = (env, argv) => {
-  const { mode } = argv;
+module.exports = (_env, argv) => {
+  let { mode } = argv;
+
+  mode = mode ?? "development";
   const isDev = mode !== "production";
 
   return {
     mode,
+    devServer: {
+      port: 3001,
+    },
     entry: path.resolve(__dirname, "src/index.ts"),
     devtool: "source-map",
     output: {
       filename: "index.js",
       path: path.resolve(__dirname, "dist"),
-      library: {
-        type: "module",
-      },
       clean: true,
-    },
-    experiments: {
-      outputModule: true,
     },
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "src"),
       },
-      extensions: [".ts", ".tsx"],
+      extensions: [".ts", ".tsx", ".js"],
     },
     module: {
       rules: [
@@ -47,14 +45,22 @@ module.exports = (env, argv) => {
         },
       ],
     },
-    externals: {
-      react: "react",
-      "react-dom": "react-dom",
-    },
     plugins: [
       new ProgressPlugin(),
       new ESLintPlugin({
         extensions: [".ts", ".tsx"],
+      }),
+      new container.ModuleFederationPlugin({
+        name: "ui",
+        filename: "remoteEntry.js",
+        exposes: {
+          "./Button": "./src/components/Button",
+          "./Header": "./src/components/Header",
+        },
+        shared: {
+          react: { singleton: true },
+          "react-dom": { singleton: true },
+        },
       }),
     ].concat(isDev ? [] : [new MiniCssExtractPlugin()]),
   };

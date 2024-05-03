@@ -1,23 +1,28 @@
 import React from "react";
 
-import { Header } from "@ifnos/stitches-ui";
 import "./page.css";
 
 type User = {
   name: string;
 };
 
+const Header = React.lazy(() =>
+  import("ui/Header").then((module) => ({ default: module.Header }))
+);
+
 export const Page: React.FC = () => {
   const [user, setUser] = React.useState<User>();
 
   return (
     <article>
-      <Header
-        user={user}
-        onLogin={() => setUser({ name: "Jane Doe" })}
-        onLogout={() => setUser(undefined)}
-        onCreateAccount={() => setUser({ name: "Jane Doe" })}
-      />
+      <React.Suspense fallback="fallback">
+        <Header
+          user={user}
+          onLogin={() => setUser({ name: "Jane Doe" })}
+          onLogout={() => setUser(undefined)}
+          onCreateAccount={() => setUser({ name: "Jane Doe" })}
+        />
+      </React.Suspense>
 
       <section className="storybook-page">
         <h2>Pages in Storybook</h2>

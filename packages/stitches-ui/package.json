@@ -6,6 +6,7 @@
     ".": "./src/index.ts"
   },
   "scripts": {
+    "start": "webpack server",
     "build": "webpack --mode=production",
     "sb": "dotenv -e ../../.env -- cross-var storybook dev -p %STITCHES_UI_SB_PORT%",
     "sb:compose": "dotenv -e ../../.env -- cross-var storybook dev -p %STITCHES_UI_SB_PORT% --no-open",
