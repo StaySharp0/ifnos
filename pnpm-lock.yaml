@@ -23,9 +23,9 @@ importers:
 
   apps/ui-docs:
     dependencies:
-      '@ifnos/ui':
+      '@ifnos/stitches-ui':
         specifier: workspace:*
-        version: link:../../packages/ui
+        version: link:../../packages/stitches-ui
       react:
         specifier: ^18.2.0
         version: 18.3.1
@@ -118,7 +118,7 @@ importers:
         specifier: ^5.0.4
         version: 5.0.4(webpack-cli@5.1.4)(webpack@5.91.0)
 
-  packages/ui:
+  packages/stitches-ui:
     dependencies:
       react:
         specifier: ^18.2.0

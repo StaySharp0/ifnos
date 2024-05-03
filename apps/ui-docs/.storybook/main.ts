@@ -11,7 +11,7 @@ function getAbsolutePath(value: string): any {
 }
 
 const {
-  env: { NODE_ENV, UI_STORYBOOK_PORT },
+  env: { NODE_ENV, STITCHES_UI_SB_PORT },
 } = process;
 const isDev = NODE_ENV === "development";
 
@@ -33,9 +33,9 @@ const config: StorybookConfig = {
     autodocs: "tag",
   },
   refs: {
-    ui: {
-      title: "UI",
-      url: isDev ? `http://localhost:${UI_STORYBOOK_PORT}` : "ui/",
+    "stitches-ui": {
+      title: "stitches-ui",
+      url: isDev ? `http://localhost:${STITCHES_UI_SB_PORT}` : "/",
     },
   },
   webpackFinal: async (config) => {

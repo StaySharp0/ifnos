@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Header } from "@ifnos/ui";
+import { Header } from "@ifnos/stitches-ui";
 import "./page.css";
 
 type User = {

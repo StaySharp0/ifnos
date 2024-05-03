@@ -1,16 +1,16 @@
 {
   "private": true,
-  "name": "@ifnos/ui",
+  "name": "@ifnos/stitches-ui",
   "version": "0.1.0",
   "exports": {
     ".": "./src/index.ts"
   },
   "scripts": {
     "build": "webpack --mode=production",
-    "sb": "dotenv -e ../../.env -- cross-var storybook dev -p %UI_STORYBOOK_PORT%",
-    "sb:compose": "dotenv -e ../../.env -- cross-var storybook dev -p %UI_STORYBOOK_PORT% --no-open",
+    "sb": "dotenv -e ../../.env -- cross-var storybook dev -p %STITCHES_UI_SB_PORT%",
+    "sb:compose": "dotenv -e ../../.env -- cross-var storybook dev -p %STITCHES_UI_SB_PORT% --no-open",
     "sb:build": "storybook build --quiet",
-    "sb:move": "mv storybook-static ../../storybook-static/ui"
+    "sb:move": "mv storybook-static ../../storybook-static/stitches-ui"
   },
   "dependencies": {
     "react": "^18.2.0",
