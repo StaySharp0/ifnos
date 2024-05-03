@@ -23,6 +23,7 @@ export interface ButtonProps {
 /**
  * Primary UI component for user interaction
  */
+const ButtonClassName = "stitches-ui--btn";
 export const Button = ({
   mode = "primary",
   size = "medium",
@@ -31,6 +32,7 @@ export const Button = ({
 }: ButtonProps) => {
   return (
     <ButtonStyled
+      className={ButtonClassName}
       mode={mode as ButtonStyledVariantsType["mode"]}
       size={size as ButtonStyledVariantsType["size"]}
       {...props}
@@ -40,9 +42,12 @@ export const Button = ({
   );
 };
 
+Button.toString = () => `.${ButtonClassName}`;
+
 type ButtonStyledVariantsType = VariantProps<typeof ButtonStyled>;
 
 const ButtonStyled = styled("button", {
+  fontFamily: "'Nunito Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif",
   fontWeight: 700,
   border: 0,
   borderRadius: "3em",
