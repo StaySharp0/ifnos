@@ -1,0 +1,27 @@
+{
+  "name": "ifnos",
+  "version": "0.1.0",
+  "description": "If not now, then when?",
+  "author": "YongJun Kim <staysharp0@gmail.com>",
+  "keywords": [],
+  "license": "MIT",
+  "scripts": {
+    "sb": "turbo run sb:compose --parallel",
+    "sb:build": "turbo run sb:build --parallel && turbo run sb:move --filter=ui-docs && turbo run sb:move --filter=!ui-docs",
+    "sb:static": "cd ./storybook-static && dotenv -e ../.env -- cross-var http-server -c-1 -s -p %SB_PORT% -o ./"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=20.12.2",
+    "pnpm": ">=8.9.0"
+  },
+  "devDependencies": {
+    "cross-var": "^1.1.0",
+    "dotenv-cli": "^7.4.1",
+    "http-server": "^14.1.1",
+    "turbo": "latest"
+  }
+}

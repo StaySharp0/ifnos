@@ -1,0 +1,15 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalDotEnv": [".env"],
+  "pipeline": {
+    "sb:compose": {
+      "cache": false
+    },
+    "sb:build": {
+      "outputs": ["storybook-static/**"]
+    },
+    "sb:move": {
+      "cache": false
+    }
+  }
+}

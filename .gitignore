@@ -1,0 +1,18 @@
+# Turborepo
+.turbo/
+
+# Dependency directories
+node_modules/
+
+# Build output
+dist/
+storybook-static/
+
+# Environment variable files
+*.local
+
+# Log
+logs
+*.log
+pnpm-debug.log*
+*storybook.log
