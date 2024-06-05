@@ -1,0 +1,33 @@
+{
+  "name": "boilerplate-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack serve",
+    "build": "webpack --mode production"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@svgr/webpack": "^8.1.0",
+    "@swc/cli": "^0.3.12",
+    "@swc/core": "^1.4.17",
+    "@types/ifnos-app": "workspace:^",
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
+    "css-loader": "^7.1.1",
+    "html-webpack-plugin": "^5.6.0",
+    "mini-css-extract-plugin": "^2.9.0",
+    "style-loader": "^4.0.0",
+    "swc-loader": "^0.2.6",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.0.4"
+  }
+}
