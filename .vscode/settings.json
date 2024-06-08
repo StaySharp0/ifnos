@@ -2,6 +2,13 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "files.autoSave": "afterDelay",
-  "cSpell.words": ["Autodocs", "Avenir", "ifnos", "svgr"],
+  "cSpell.words": [
+    "Autodocs",
+    "Avenir",
+    "gifsicle",
+    "ifnos",
+    "mozjpeg",
+    "svgr"
+  ],
   "explorer.compactFolders": false
 }
