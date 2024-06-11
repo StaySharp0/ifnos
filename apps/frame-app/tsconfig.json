@@ -30,6 +30,7 @@
     "target": "ESNext",
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "jsx": "react-jsx",
+    "jsxImportSource": "@emotion/react",
     "useDefineForClassFields": true,
 
     /* Completeness */
