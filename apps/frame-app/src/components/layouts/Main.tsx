@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { AppBarWidth } from "./AppBar";
+import { AppBarWidth } from "./app-bar/AppBar";
 
 export const Main = styled.section`
   position: absolute;

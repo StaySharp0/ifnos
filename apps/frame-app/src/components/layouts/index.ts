@@ -1,2 +1,2 @@
-export { AppBar } from "./AppBar";
+export { AppBar } from "./app-bar/AppBar";
 export { Main } from "./Main";

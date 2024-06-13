@@ -13,15 +13,27 @@ export const ThemeStyle: React.FC = () => {
 };
 
 const lightTheme = css`
-  --appBar-background: #f8f8f8;
   --appBar-border: #e5e5e5;
-  --main-background: #fff;
+  --appBar-background: #f8f8f8;
+  --appBar-app-hover-background: #0000000c;
+  --appBar-appClose-hover-background: #0000001c;
+  --appBar-app-active-shadow: 1px 2px 3px 1px #0000001a;
+  --appBar-app-active-border: #0000001a;
+  --appBar-app-active-background: transparent;
+  --main-background: #ffffff;
+  --text-color: #271111;
 `;
 
 const darkTheme = css`
-  --appBar-background: #181818;
   --appBar-border: #2b2b2b;
+  --appBar-background: #181818;
+  --appBar-app-hover-background: #ffffff1c;
+  --appBar-appClose-hover-background: #ffffff20;
+  --appBar-app-active-shadow: none;
+  --appBar-app-active-border: #ffffff24;
+  --appBar-app-active-background: #ffffff1c;
   --main-background: #1f1f1f;
+  --text-color: #cccccc;
 `;
 
 const styles = css`
