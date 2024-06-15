@@ -1,13 +1,13 @@
 import { Global, css } from "@emotion/react";
-import { useTheme } from "./ThemeProvider";
+import { useGetTheme } from "./ThemeQuery";
 import { useEffect } from "react";
 
 export const ThemeStyle: React.FC = () => {
-  const { theme } = useTheme();
+  const theme = useGetTheme();
 
   useEffect(() => {
-    document.body.dataset.theme = theme;
-  }, [theme]);
+    document.body.dataset.theme = theme.data;
+  }, [theme.data]);
 
   return <Global styles={styles} />;
 };

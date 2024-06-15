@@ -8,7 +8,8 @@
     "gifsicle",
     "ifnos",
     "mozjpeg",
-    "svgr"
+    "svgr",
+    "tanstack"
   ],
   "explorer.compactFolders": false
 }
