@@ -46,6 +46,7 @@ const AppIcon = styled.img`
   padding: 7px;
   width: 30px;
   height: 30px;
+  aspect-ratio: 1;
 `;
 
 const Title = styled.div`
