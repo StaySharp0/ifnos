@@ -1,21 +1,34 @@
+import { useFocusApp } from "@/queries/ContextQuery";
 import { cx } from "@emotion/css";
 import styled from "@emotion/styled";
+import { memo } from "react";
 
 interface Props {
-  icon: string;
-  title: string;
+  context: FrameApp.AppContext;
   active: boolean;
 }
 
-export const App: React.FC<Props> = ({ icon, title, active }) => {
+export const App: React.FC<Props> = memo(({ context, active }) => {
+  const { favicon, name } = context;
+  const { mutate } = useFocusApp();
+
   return (
-    <Container className={cx({ active })} role="listitem" tabIndex={0}>
-      <AppIcon src={icon} alt={`${title} icon`} />
-      <Title title={title}>{title}</Title>
-      <CloseButton title="앱 닫기">×</CloseButton>
+    <Container
+      className={cx({ active })}
+      role="listitem"
+      tabIndex={0}
+      onClick={() => mutate(context)}
+    >
+      <AppIcon src={favicon} alt={`${name} icon`} />
+      <Title title={name}>{name}</Title>
+      <CloseButton title="앱 닫기">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+          <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+        </svg>
+      </CloseButton>
     </Container>
   );
-};
+});
 
 const Container = styled.li`
   cursor: pointer;
@@ -67,13 +80,19 @@ const CloseButton = styled.div`
   margin: 7px;
   width: 16px;
   height: 16px;
-
   border-radius: 4px;
 
   font-size: 12px;
   line-height: 16px;
   font-weight: bold;
   text-align: center;
+
+  svg {
+    margin: 2px;
+    width: 12px;
+    height: 12px;
+    fill: var(--text-color);
+  }
 
   :hover {
     background-color: var(--appBar-appClose-hover-background);

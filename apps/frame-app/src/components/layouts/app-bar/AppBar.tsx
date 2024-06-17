@@ -1,17 +1,22 @@
 import styled from "@emotion/styled";
 import { App } from "./App";
 
+import {  useGetAppBarList } from "@/queries/ContextQuery";
+
 export const AppBar: React.FC = () => {
+  const { data, isSuccess } = useGetAppBarList();
+
   return (
     <nav>
       <Container>
-        {[...Array(5)].map((_, i) => (
-          <App
-            title="test1234test1234test1234test1234test1234test1234test1234test1234test1234test1234"
-            icon={"https://dummyimage.com/16/fff/000.png&text=x"}
-            active={i === 1}
-          />
-        ))}
+        {isSuccess &&
+          data.apps.map((context) => (
+            <App
+              key={context.id}
+              context={context}
+              active={context.id === data.focus?.id}
+            />
+          ))}
       </Container>
     </nav>
   );
