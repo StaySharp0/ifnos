@@ -2,6 +2,9 @@ import { useFocusApp } from "@/queries/ContextQuery";
 import { cx } from "@emotion/css";
 import styled from "@emotion/styled";
 import { memo } from "react";
+import { NavLink } from "react-router-dom";
+
+import { getRemoteAppURL } from "@/router";
 
 interface Props {
   context: FrameApp.AppContext;
@@ -9,7 +12,7 @@ interface Props {
 }
 
 export const App: React.FC<Props> = memo(({ context, active }) => {
-  const { favicon, name } = context;
+  const { id, favicon, name } = context;
   const { mutate } = useFocusApp();
 
   return (
@@ -19,13 +22,15 @@ export const App: React.FC<Props> = memo(({ context, active }) => {
       tabIndex={0}
       onClick={() => mutate(context)}
     >
-      <AppIcon src={favicon} alt={`${name} icon`} />
-      <Title title={name}>{name}</Title>
-      <CloseButton title="앱 닫기">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
-          <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
-        </svg>
-      </CloseButton>
+      <NavLink to={getRemoteAppURL(id)}>
+        <AppIcon src={favicon} alt={`${name} icon`} />
+        <Title title={name}>{name}</Title>
+        <CloseButton title="앱 닫기">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+            <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+          </svg>
+        </CloseButton>
+      </NavLink>
     </Container>
   );
 });
