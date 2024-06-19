@@ -26,14 +26,15 @@ module.exports = (_env, argv) => {
   return {
     mode,
     devServer: {
-      open: true,
-      hot: true,
       static: [
         {
           directory: path.join(__dirname, "public"),
           publicPath,
         },
       ],
+      open: true,
+      hot: true,
+      historyApiFallback: true,
     },
     entry: path.resolve(__dirname, "src/main.tsx"),
     devtool: "source-map",
@@ -41,6 +42,7 @@ module.exports = (_env, argv) => {
       filename: "index.js",
       path: path.resolve(__dirname, "dist"),
       clean: true,
+      publicPath: "/",
     },
     resolve: {
       alias: {
