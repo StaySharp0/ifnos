@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { App } from "./App";
 
-import {  useGetAppBarList } from "@/queries/ContextQuery";
+import { useGetAppBarList } from "@/queries/ContextQuery";
 
 export const AppBar: React.FC = () => {
   const { data, isSuccess } = useGetAppBarList();
@@ -11,11 +11,7 @@ export const AppBar: React.FC = () => {
       <Container>
         {isSuccess &&
           data.apps.map((context) => (
-            <App
-              key={context.id}
-              context={context}
-              active={context.id === data.focus?.id}
-            />
+            <App key={context.id} context={context} />
           ))}
       </Container>
     </nav>
@@ -30,6 +26,9 @@ const Container = styled.ul`
   left: 0;
   z-index: 999;
 
+  display: flex;
+  flex-direction: column;
+
   margin: 0;
   padding: 5px 10px;
   width: ${AppBarWidth};
@@ -38,8 +37,7 @@ const Container = styled.ul`
   background-color: var(--appBar-background);
   border-right: 1px solid var(--appBar-border);
 
-  display: flex;
-  flex-direction: column;
+  list-style: none;
 
   transition: width 0.25s ease-out;
   transition-delay: 0;

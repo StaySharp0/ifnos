@@ -1,28 +1,21 @@
-import { useFocusApp } from "@/queries/ContextQuery";
-import { cx } from "@emotion/css";
-import styled from "@emotion/styled";
 import { memo } from "react";
 import { NavLink } from "react-router-dom";
+import styled from "@emotion/styled";
 
+import { useFocusApp } from "@/queries/ContextQuery";
 import { getRemoteAppURL } from "@/router";
 
 interface Props {
   context: FrameApp.AppContext;
-  active: boolean;
 }
 
-export const App: React.FC<Props> = memo(({ context, active }) => {
+export const App: React.FC<Props> = memo(({ context }) => {
   const { id, favicon, name } = context;
   const { mutate } = useFocusApp();
 
   return (
-    <Container
-      className={cx({ active })}
-      role="listitem"
-      tabIndex={0}
-      onClick={() => mutate(context)}
-    >
-      <NavLink to={getRemoteAppURL(id)}>
+    <li>
+      <Container to={getRemoteAppURL(id)} onClick={() => mutate(context)}>
         <AppIcon src={favicon} alt={`${name} icon`} />
         <Title title={name}>{name}</Title>
         <CloseButton title="앱 닫기">
@@ -30,13 +23,12 @@ export const App: React.FC<Props> = memo(({ context, active }) => {
             <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
           </svg>
         </CloseButton>
-      </NavLink>
-    </Container>
+      </Container>
+    </li>
   );
 });
 
-const Container = styled.li`
-  cursor: pointer;
+const Container = styled(NavLink)`
   display: flex;
 
   margin: 2px 0;
@@ -48,8 +40,10 @@ const Container = styled.li`
 
   overflow: hidden;
   color: var(--text-color);
+  text-decoration: none;
+  outline: none;
 
-  &.active {
+  &[aria-current] {
     box-shadow: var(--appBar-app-active-shadow);
     border-color: var(--appBar-app-active-border);
     background-color: var(--appBar-app-active-background);
