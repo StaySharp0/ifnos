@@ -6,7 +6,10 @@ import {
   createBrowserRouter,
 } from "react-router-dom";
 
+import { updateAppCurrent } from "./queries/ContextQuery";
+
 import { AppBar, Main } from "./components/layouts";
+import { QueryClient } from "@tanstack/react-query";
 
 const remotePrefix = "/apps";
 export const getRemoteAppURL = (appId: string) => `${remotePrefix}/${appId}`;
@@ -41,7 +44,9 @@ const DummyRemoteApp = () => {
 };
 
 /* https://github.com/remix-run/react-router/issues/10787 */
-export const frameRouter: ReturnType<typeof createBrowserRouter> =
+export const createRouter = (
+  queryClient: QueryClient
+): ReturnType<typeof createBrowserRouter> =>
   createBrowserRouter([
     {
       path: "/",
@@ -60,6 +65,13 @@ export const frameRouter: ReturnType<typeof createBrowserRouter> =
         /* ThirdPartyApp */
         {
           path: `${remotePrefix}/:appId/*`,
+          loader: async ({ request, params: { appId } }) => {
+            const { pathname, search } = new URL(request.url);
+
+            await updateAppCurrent(queryClient, appId!, pathname + search);
+
+            return {};
+          },
           element: <DummyRemoteApp />,
         },
       ],

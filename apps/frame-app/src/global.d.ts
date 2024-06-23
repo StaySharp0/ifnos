@@ -5,10 +5,10 @@ module FrameApp {
     id: string;
     favicon: string;
     name: string;
+    current: string;
   }
 
   interface FrameContext {
-    focus?: AppContext;
     apps: Array<AppContext>;
   }
 }

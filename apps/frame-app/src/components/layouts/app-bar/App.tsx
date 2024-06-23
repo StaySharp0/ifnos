@@ -2,20 +2,10 @@ import { memo } from "react";
 import { NavLink } from "react-router-dom";
 import styled from "@emotion/styled";
 
-import { useFocusApp } from "@/queries/ContextQuery";
-import { getRemoteAppURL } from "@/router";
-
-interface Props {
-  context: FrameApp.AppContext;
-}
-
-export const App: React.FC<Props> = memo(({ context }) => {
-  const { id, favicon, name } = context;
-  const { mutate } = useFocusApp();
-
-  return (
+export const App: React.FC<{ context: FrameApp.AppContext }> = memo(
+  ({ context: { current, favicon, name } }) => (
     <li>
-      <Container to={getRemoteAppURL(id)} onClick={() => mutate(context)}>
+      <Container to={current}>
         <AppIcon src={favicon} alt={`${name} icon`} />
         <Title title={name}>{name}</Title>
         <CloseButton title="앱 닫기">
@@ -25,8 +15,8 @@ export const App: React.FC<Props> = memo(({ context }) => {
         </CloseButton>
       </Container>
     </li>
-  );
-});
+  )
+);
 
 const Container = styled(NavLink)`
   display: flex;

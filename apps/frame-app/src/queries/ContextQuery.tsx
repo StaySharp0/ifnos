@@ -1,14 +1,16 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { QueryClient, useQuery } from "@tanstack/react-query";
+
+import { getRemoteAppURL } from "@/router";
 
 const queryKey = ["frame-app", "frame-context"];
 const queryFn = (): FrameApp.FrameContext => {
   // TODO: Indexed DB, Remote
   return {
-    focus: undefined,
     apps: [...Array(5)].map((_, i) => ({
       id: `app-${i}`,
       favicon: "https://dummyimage.com/16/fff/000.png&text=x",
       name: `app-${i}`,
+      current: getRemoteAppURL(`app-${i}`),
     })),
   };
 };
@@ -20,25 +22,24 @@ export const useGetAppBarList = () =>
     staleTime: Infinity,
   });
 
-// TODO: Indexed DB, Remote
-const mutationFn = (app: FrameApp.AppContext) => {
-  return new Promise((resolve) => resolve(app));
-};
-export const useFocusApp = () => {
-  const queryClient = useQueryClient();
+export const updateAppCurrent = async (
+  queryClient: QueryClient,
+  appId: string,
+  current: string
+) => {
+  if (!appId) throw new Error("no appId");
 
-  return useMutation({
-    mutationFn,
-    onMutate: (app) => {
-      queryClient.setQueryData<FrameApp.FrameContext>(
-        queryKey,
-        (old) =>
-          old && {
-            ...old,
-            focus: app,
-          }
-      );
-    },
-    // TODO: onSuccess
-  });
+  await queryClient.ensureQueryData({ queryKey, queryFn });
+  // TODO: Indexed DB, Remote
+  queryClient.setQueryData<FrameApp.FrameContext>(
+    queryKey,
+    (old) =>
+      old && {
+        ...old,
+        apps: old.apps.map((app) => ({
+          ...app,
+          current: app.id === appId ? current : app.current,
+        })),
+      }
+  );
 };
