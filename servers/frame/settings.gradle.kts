@@ -11,4 +11,4 @@ plugins {
 }
 
 rootProject.name = "frame"
-include("app", "list", "utilities")
+include("domain", "app", "list", "utilities")
