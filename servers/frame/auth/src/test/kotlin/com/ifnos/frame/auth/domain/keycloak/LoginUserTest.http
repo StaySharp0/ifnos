@@ -1,0 +1,8 @@
+POST /api/auth/test-realm/login
+Host: localhost:20100
+Content-Type: application/json
+
+{
+  "email": "test@test.com",
+  "password": "qwer1234!@"
+}

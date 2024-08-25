@@ -7,3 +7,5 @@ out
 
 ### Ignore Intellij ###
 .idea
+
+docker/db/data

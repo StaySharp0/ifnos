@@ -1,0 +1,17 @@
+server:
+  port: 20000
+spring:
+  main:
+    web-application-type: reactive
+  cloud:
+    gateway:
+      enabled: true
+
+service-url:
+  auth: ${ AUTH_SERVICE_URL:http://localhost:20100 }
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    org.springframework.security: DEBUG
+    reactor.netty.http.client: DEBUG

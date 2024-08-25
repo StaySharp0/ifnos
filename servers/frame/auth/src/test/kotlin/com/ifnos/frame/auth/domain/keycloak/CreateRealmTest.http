@@ -1,0 +1,7 @@
+POST /api/internal/keycloak/realm
+Host: localhost:20100
+Content-Type: application/json
+
+{
+  "realmName": "test-realm"
+}

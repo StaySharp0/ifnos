@@ -12,6 +12,7 @@ plugins {
 
 rootProject.name = "frame"
 include(
+    "gateway", "auth",
     "domain",
     "infrastructure",
     "app", "list", "utilities"

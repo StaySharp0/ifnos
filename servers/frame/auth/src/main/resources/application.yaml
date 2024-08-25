@@ -1,0 +1,20 @@
+server:
+  port: 20100
+
+#spring:
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+
+
+keycloak:
+  url: ${KEYCLOAK_URL:http://localhost:8080}
+  realm: master
+  client-id: admin-cli
+  username: admin
+  password: admin
+#  login:
+#    redirect-url: ${KEYCLOAK_LOGIN_REDIRECT_URL:http://localhost:20000/login}
+
+logging:
+  level:
+    feign: INFO
