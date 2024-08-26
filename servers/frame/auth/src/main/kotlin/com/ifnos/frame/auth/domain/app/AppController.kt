@@ -10,12 +10,15 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/app")
 class AppController(
-    private val appService: AppService,
+    private val appSvc: AppService,
 ) {
 
     @PostMapping
-    fun createStore(@RequestBody req: CreateAppRequest): ResponseEntity<App> = appService.create(req).run {
-        ResponseEntity.ok(this)
+    fun createApp(
+        realm: String = "test-realm", /* TODO: 헤더에서 추출 */
+        @RequestBody req: CreateAppRequest,
+    ): ResponseEntity<App> = req.run {
+        ResponseEntity.ok(appSvc.create(realm, name, description))
     }
 }
 

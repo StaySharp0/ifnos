@@ -18,7 +18,6 @@ class AuthController(private val keycloakAuthService: KeycloakAuthService) {
         keycloakAuthService.login(realm, email, password, client)
     }
 
-
     // @PostMapping("/refresh")
     // fun refreshToken(
     //     @RequestParam @NotBlank refreshToken: String,

@@ -15,6 +15,6 @@ keycloak:
 #  login:
 #    redirect-url: ${KEYCLOAK_LOGIN_REDIRECT_URL:http://localhost:20000/login}
 
-logging:
-  level:
-    feign: INFO
+#logging:
+#  level:
+#    root: DEBUG

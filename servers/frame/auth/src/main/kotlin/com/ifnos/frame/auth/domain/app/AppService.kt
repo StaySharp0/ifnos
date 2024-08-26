@@ -8,15 +8,14 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class AppService(
-    private val keycloakAdminService: KeycloakAdminService,
+    private val adminSvc: KeycloakAdminService,
     private val appRepository: AppRepository,
 ) {
+
     @Transactional
-    fun create(req: CreateAppRequest) = req.run {
+    fun create(realm: String, name: String, description: String): App {
+        adminSvc.createClient(realm, clientName = name)
 
-        // keycloakAdminService.createClient()
-
-
-        appRepository.save(App(name = name, description = description))
+        return appRepository.save(App(name = name, description = description))
     }
 }

@@ -2,81 +2,85 @@ package com.ifnos.frame.auth.domain.keycloak
 
 import com.ifnos.frame.auth.domain.keycloak.KeycloakConstant.Companion.PORTAL_CLI_NAME
 import com.ifnos.frame.auth.domain.keycloak.KeycloakConstant.Companion.ROLES
-import org.keycloak.admin.client.Keycloak
+import org.keycloak.admin.client.KeycloakBuilder
 import org.keycloak.admin.client.resource.RealmResource
 import org.keycloak.representations.idm.*
 import org.springframework.stereotype.Service
 
 @Service
 class KeycloakAdminService(
-    private val admin: Keycloak,
-    private val roleSvc: KeycloakRoleService,
+    private val keycloakBuilder: KeycloakBuilder,
     private val repo: KeycloakRepo,
 ) {
 
     fun createRealm(realmName: String) {
-        admin.realms().create(RealmRepresentation().apply {
-            realm = realmName
-            isEnabled = true
-        })
+        keycloakBuilder.build().use { admin ->
+            admin.realms().create(RealmRepresentation().apply {
+                realm = realmName
+                isEnabled = true
+            })
 
-        admin.realm(realmName).run {
-            // TODO: app이 만들어질 때마다 생성되어야할듯...
-            createClient(this)
-            setAllOptionalClientScope(this)
-            addProtocolMappers(this)
+            admin.realm(realmName).also { realm ->
+                // TODO: app이 만들어질 때마다 생성되어야할듯...
+                createClient(realmName)
+                setAllOptionalClientScope(realm)
+                addProtocolMappers(realm)
+            }
         }
     }
 
-    fun createClient(realm: RealmResource, clientName: String = PORTAL_CLI_NAME) {
-        // Client 생성
-        realm.clients().create(ClientRepresentation().apply {
-            clientId = clientName
-            isPublicClient = true
-            isDirectAccessGrantsEnabled = true
-            isServiceAccountsEnabled = true
-        })
+    fun createClient(realmName: String, clientName: String = PORTAL_CLI_NAME) {
+        keycloakBuilder.build().use { admin ->
+            val realm = admin.realm(realmName)
 
-        val client = realm.clients().findByClientId(clientName).firstOrNull()
-            ?: throw IllegalArgumentException("Client not found: $clientName")
-
-        // Client Role 생성
-        val clientRolesResource = realm.clients().get(client.id).roles()
-        ROLES.forEach { roleName ->
-            clientRolesResource.create(RoleRepresentation().apply {
-                clientRole = true
-                name = roleName
-            })
-        }
-
-        // Client 그룹 생성
-        val clientGroupName = client.id
-        realm.groups()
-            .add(GroupRepresentation().apply {
-                name = clientGroupName
-                attributes = mapOf("clientName" to listOf(clientName))
+            // Client 생성
+            realm.clients().create(ClientRepresentation().apply {
+                clientId = clientName
+                isPublicClient = true
+                isDirectAccessGrantsEnabled = true
+                isServiceAccountsEnabled = true
             })
 
-        val clientGroupId = realm.groups().groups().find { it.name == clientGroupName }?.id
-            ?: throw IllegalStateException("Group '$clientGroupName' was not created successfully.")
+            val client = realm.clients().findByClientId(clientName).firstOrNull()
+                ?: throw IllegalArgumentException("Client not found: $clientName")
 
-        // Client/Role 그룹 생성
-        val clientRoles = clientRolesResource.list()
+            // Client Role 생성
+            val clientRolesResource = realm.clients().get(client.id).roles()
+            ROLES.forEach { roleName ->
+                clientRolesResource.create(RoleRepresentation().apply {
+                    clientRole = true
+                    name = roleName
+                })
+            }
 
-        clientRolesResource.list().forEach { role ->
-            realm.groups().group(clientGroupId)
-                .subGroup(GroupRepresentation().apply { name = role.name })
-        }
+            // Client 그룹 생성
+            val clientGroupName = client.id
+            realm.groups()
+                .add(GroupRepresentation().apply {
+                    name = clientGroupName
+                    attributes = mapOf("clientName" to listOf(clientName))
+                })
 
-        // Client/Role 그룹 ClientRole 매핑
-        // https://github.com/keycloak/keycloak/issues/20445
-        val roleGroups = realm.groups().group(clientGroupId).getSubGroups(0, ROLES.size, true)
-        clientRoles.forEach { role ->
-            roleGroups.find { it.name == role.name }?.run {
-                realm.groups().group(id)
-                    .roles()
-                    .clientLevel(client.id)
-                    .add(listOf(role))
+            val clientGroupId = realm.groups().groups().find { it.name == clientGroupName }?.id
+                ?: throw IllegalStateException("Group '$clientGroupName' was not created successfully.")
+
+            // Client/Role 그룹 생성
+            val clientRoles = clientRolesResource.list()
+            clientRoles.forEach { role ->
+                realm.groups().group(clientGroupId)
+                    .subGroup(GroupRepresentation().apply { name = role.name })
+            }
+
+            // Client/Role 그룹 ClientRole 매핑
+            // https://github.com/keycloak/keycloak/issues/20445
+            val roleGroups = realm.groups().group(clientGroupId).getSubGroups(0, ROLES.size, true)
+            clientRoles.forEach { role ->
+                roleGroups.find { it.name == role.name }?.run {
+                    realm.groups().group(id)
+                        .roles()
+                        .clientLevel(client.id)
+                        .add(listOf(role))
+                }
             }
         }
     }
@@ -141,5 +145,6 @@ class KeycloakAdminService(
             }
         })
     }
+
 }
 

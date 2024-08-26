@@ -1,0 +1,8 @@
+POST /api/app
+Host: localhost:20100
+Content-Type: application/json
+
+{
+  "name": "app 1111111",
+  "description": "custom app1"
+}
