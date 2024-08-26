@@ -18,21 +18,22 @@ class AuthController(private val keycloakAuthService: KeycloakAuthService) {
         keycloakAuthService.login(realm, email, password, client)
     }
 
-    // @PostMapping("/refresh")
-    // fun refreshToken(
-    //     @RequestParam @NotBlank refreshToken: String,
-    // ): ResponseEntity<Map<String, String>> {
-    //     return try {
-    //         val accessToken: AccessToken = keycloakAuthService.refreshToken(refreshToken)
-    //         ResponseEntity.ok(mapOf("access_token" to accessToken.token))
-    //     } catch (e: Exception) {
-    //         ResponseEntity.badRequest().body(mapOf("error" to e.message))
-    //     }
-    // }
+    @PostMapping("{realm}/refresh")
+    fun refresh(
+        @PathVariable("realm") realm: String,
+        @RequestBody req: RefreshRequest,
+    ) = req.run {
+        keycloakAuthService.refresh(realm, clientId, refreshToken)
+    }
 }
 
 data class LoginRequest(
     @Email @NotBlank val email: String,
     @NotBlank val password: String,
     val client: String = PORTAL_CLI_NAME,
+)
+
+data class RefreshRequest(
+    val clientId: String,
+    val refreshToken: String,
 )

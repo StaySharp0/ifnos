@@ -22,4 +22,15 @@ class KeycloakAuthService(
             ),
         )
     }
+
+    fun refresh(realm: String, clientId: String, refreshToken: String): Map<String, String> {
+        return keycloakClient.getToken(
+            realm = realm,
+            mapOf(
+                "grant_type" to "refresh_token",
+                "client_id" to clientId,
+                "refresh_token" to refreshToken,
+            ),
+        )
+    }
 }
