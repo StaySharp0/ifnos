@@ -1,5 +1,6 @@
 package com.ifnos.frame.auth.domain.auth
 
+import com.ifnos.frame.auth.domain.keycloak.KeycloakConstant.Companion.PORTAL_CLI_NAME
 import jakarta.validation.Valid
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
@@ -34,5 +35,5 @@ class AuthController(private val keycloakAuthService: KeycloakAuthService) {
 data class LoginRequest(
     @Email @NotBlank val email: String,
     @NotBlank val password: String,
-    val client: String = "portal-cli",
+    val client: String = PORTAL_CLI_NAME,
 )

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service
 @Service
 class KeycloakUserService(
     private val admin: Keycloak,
-    private val roleService: KeycloakRoleService,
+    private val groupSvc: KeycloakGroupService,
 ) {
     fun createUser(realmName: String, email: String, name: String, password: String) {
         val realm = admin.realm(realmName)
@@ -27,8 +27,7 @@ class KeycloakUserService(
                 val userId = location.path.substringAfterLast("/")
 
                 setUserPassword(realm, userId, password)
-                // TODO: app에 조인할때 권한 줄것
-                roleService.assignClientRoleToUser(realm, userId, "user")
+                groupSvc.joinRoleGroup(realm, userId)
             }
     }
 
