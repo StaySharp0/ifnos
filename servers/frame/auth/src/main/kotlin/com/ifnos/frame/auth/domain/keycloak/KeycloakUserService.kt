@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service
 
 @Service
 class KeycloakUserService(
-    private val keycloak: Keycloak,
+    private val admin: Keycloak,
     private val roleService: KeycloakRoleService,
 ) {
     fun createUser(realmName: String, email: String, name: String, password: String) {
-        val realm = keycloak.realm(realmName)
+        val realm = admin.realm(realmName)
 
         realm.users()
             .create(UserRepresentation().apply {

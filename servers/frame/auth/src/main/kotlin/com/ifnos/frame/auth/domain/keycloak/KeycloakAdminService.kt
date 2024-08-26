@@ -8,20 +8,22 @@ import org.springframework.stereotype.Service
 
 @Service
 class KeycloakAdminService(
-    private val keycloak: Keycloak,
+    private val admin: Keycloak,
     private val roleService: KeycloakRoleService,
+    private val repo: KeycloakRepo,
 ) {
 
     fun createRealm(realmName: String) {
-        keycloak.realms().create(RealmRepresentation().apply {
+        admin.realms().create(RealmRepresentation().apply {
             id = realmName
             realm = realmName
             isEnabled = true
         })
 
-        // TODO: app이 만들어질 때마다 생성되어야할듯...
-        keycloak.realm(realmName).run {
+        admin.realm(realmName).run {
+            // TODO: app이 만들어질 때마다 생성되어야할듯...
             createClient(this)
+            setALlOptionalClientScope(this)
             roleService.createClientRoles(this)
         }
     }
@@ -35,7 +37,17 @@ class KeycloakAdminService(
         })
     }
 
+    private fun setALlOptionalClientScope(realm: RealmResource, clientId: String = "portal-cli") {
+        val client = repo.findClientResourceByClientId(realm, clientId)
+
+        client.defaultClientScopes.forEach { scope ->
+            client.removeDefaultClientScope(scope.id)
+            client.addOptionalClientScope(scope.id)
+        }
+    }
+
     companion object {
         const val PORTAL_CLI_ID = "portal-cli"
     }
 }
+
