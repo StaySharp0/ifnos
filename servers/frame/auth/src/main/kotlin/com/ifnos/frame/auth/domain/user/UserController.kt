@@ -1,6 +1,6 @@
 package com.ifnos.frame.auth.domain.user
 
-import com.ifnos.frame.auth.domain.keycloak.KeycloakAdminService
+import com.ifnos.frame.auth.domain.keycloak.KeycloakUserService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -9,15 +9,16 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/user")
-class UserController(private val keycloakAdminService: KeycloakAdminService) {
+class UserController(
+    private val userService: KeycloakUserService,
+) {
 
     @PostMapping
     fun createUser(@RequestBody req: CreateUserRequest): ResponseEntity<Nothing> = req.run {
-        keycloakAdminService
-            .createUser(
-                realmName = realm,
-                email, name, password
-            )
+        userService.createUser(
+            realmName = realm,
+            email, name, password
+        )
 
         ResponseEntity.ok(null)
     }
