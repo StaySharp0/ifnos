@@ -30,6 +30,9 @@ dependencies {
     runtimeOnly("com.h2database:h2")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
+    testImplementation("io.ktor:ktor-client-core:1.6.1")
+    testImplementation("io.ktor:ktor-client-cio:1.6.1")
 }
 
 dependencyManagement {

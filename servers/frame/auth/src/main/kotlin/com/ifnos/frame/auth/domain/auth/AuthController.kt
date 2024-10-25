@@ -25,6 +25,14 @@ class AuthController(private val keycloakAuthService: KeycloakAuthService) {
     ) = req.run {
         keycloakAuthService.refresh(realm, clientId, refreshToken)
     }
+
+    @PostMapping("{realm}/exchange")
+    fun exchange(
+        @PathVariable("realm") realm: String,
+        @RequestBody req: ExchangeRequest,
+    ) = req.run {
+        keycloakAuthService.exchange(realm, clientId, audience, subjectToken)
+    }
 }
 
 data class LoginRequest(
@@ -34,6 +42,12 @@ data class LoginRequest(
 )
 
 data class RefreshRequest(
-    val clientId: String,
+    val clientId: String, // TODO: 헤더에서 추출
     val refreshToken: String,
+)
+
+data class ExchangeRequest(
+    val clientId: String,  // TODO: 헤더에서 추출
+    val audience: String,
+    val subjectToken: String,
 )

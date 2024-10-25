@@ -3,7 +3,6 @@ package com.ifnos.frame.auth.domain.keycloak
 import com.ifnos.frame.auth.domain.keycloak.KeycloakConstant.Companion.PORTAL_CLI_NAME
 import com.ifnos.frame.auth.domain.keycloak.KeycloakConstant.Companion.ROLES
 import org.keycloak.admin.client.KeycloakBuilder
-import org.keycloak.admin.client.resource.RealmResource
 import org.keycloak.representations.idm.*
 import org.springframework.stereotype.Service
 
@@ -21,10 +20,41 @@ class KeycloakAdminService(
             })
 
             admin.realm(realmName).also { realm ->
-                // TODO: app이 만들어질 때마다 생성되어야할듯...
+                // 기본 clientScope Optional 처리
+                realm.defaultDefaultClientScopes.forEach {
+                    realm.removeDefaultDefaultClientScope(it.id)
+                    realm.addDefaultOptionalClientScope(it.id)
+                }
+
+                // realmId 주입 관련 클라이언트 스코프 및 프로토콜 매퍼 생성
+                realm.clientScopes()
+                    .create(ClientScopeRepresentation().apply {
+                        name = "realm_id"
+                        protocol = "openid-connect"
+                        protocolMappers = listOf(
+                            ProtocolMapperRepresentation().apply {
+                                name = "realm_id_mapper"
+                                protocol = "openid-connect"
+                                protocolMapper = "oidc-hardcoded-claim-mapper"
+                                config = mapOf(
+                                    "claim.name" to "realm_id",
+                                    "claim.value" to realm.toRepresentation().id,
+                                    "jsonType.label" to "String",
+                                    "id.token.claim" to "true",
+                                    "access.token.claim" to "true",
+                                    "userinfo.token.claim" to "true"
+                                )
+                            }
+                        )
+                    })
+
+                // 해당 클라이언트 스코프 Default 설정
+                val realmIdClientScope = realm.clientScopes().findAll()
+                    .firstOrNull { it.name == "realm_id" }
+                    ?: throw Exception("Client Scope not found")
+
+                realm.addDefaultDefaultClientScope(realmIdClientScope.id)
                 createClient(realmName)
-                setAllOptionalClientScope(realm)
-                addProtocolMappers(realm)
             }
         }
     }
@@ -43,9 +73,10 @@ class KeycloakAdminService(
 
             val client = realm.clients().findByClientId(clientName).firstOrNull()
                 ?: throw IllegalArgumentException("Client not found: $clientName")
+            val clientResource = realm.clients().get(client.id)
 
             // Client Role 생성
-            val clientRolesResource = realm.clients().get(client.id).roles()
+            val clientRolesResource = clientResource.roles()
             ROLES.forEach { roleName ->
                 clientRolesResource.create(RoleRepresentation().apply {
                     clientRole = true
@@ -82,69 +113,42 @@ class KeycloakAdminService(
                         .add(listOf(role))
                 }
             }
+
+            // ClientUUID, Client/Role 목록 주입 프로토콜 매퍼 적용
+            clientResource.update(clientResource.toRepresentation().apply {
+                val clientUUID = id
+                protocolMappers = protocolMappers.orEmpty().toMutableList().apply {
+                    // 로그인한 ClientUUID 주입
+                    add(ProtocolMapperRepresentation().apply {
+                        name = "client_id_mapper"
+                        protocol = "openid-connect"
+                        protocolMapper = "oidc-hardcoded-claim-mapper"
+                        config = mapOf(
+                            "claim.name" to "client_id",
+                            "claim.value" to clientUUID,
+                            "jsonType.label" to "String",
+                            "id.token.claim" to "true",
+                            "access.token.claim" to "true",
+                            "userinfo.token.claim" to "true"
+                        )
+                    })
+                    // Client/Role 목록 주입
+                    add(ProtocolMapperRepresentation().apply {
+                        name = "group-membership-mapper"
+                        protocol = "openid-connect"
+                        protocolMapper = "oidc-group-membership-mapper"
+                        config = mapOf(
+                            "claim.name" to "groups",
+                            "full.path" to "true",
+                            "jsonType.label" to "String",
+                            "id.token.claim" to "true",
+                            "access.token.claim" to "true",
+                            "userinfo.token.claim" to "true"
+                        )
+                    })
+                }
+            })
         }
     }
-
-    private fun setAllOptionalClientScope(realm: RealmResource, clientId: String = PORTAL_CLI_NAME) {
-        val client = repo.findClientResourceByClientId(realm, clientId)
-
-        client.defaultClientScopes.forEach { scope ->
-            client.removeDefaultClientScope(scope.id)
-            client.addOptionalClientScope(scope.id)
-        }
-    }
-
-    private fun addProtocolMappers(realm: RealmResource, clientId: String = PORTAL_CLI_NAME) {
-        val client = repo.findClientResourceByClientId(realm, clientId)
-
-        client.update(client.toRepresentation().apply {
-            val id = id
-            protocolMappers = protocolMappers.orEmpty().toMutableList().apply {
-                // Realm UUId 주입
-                add(ProtocolMapperRepresentation().apply {
-                    name = "realm_id_mapper"
-                    protocol = "openid-connect"
-                    protocolMapper = "oidc-hardcoded-claim-mapper"
-                    config = mapOf(
-                        "claim.name" to "realm_id",
-                        "claim.value" to realm.toRepresentation().id,
-                        "jsonType.label" to "String",
-                        "id.token.claim" to "true",
-                        "access.token.claim" to "true",
-                        "userinfo.token.claim" to "true"
-                    )
-                })
-                // 로그인한 Client UUID 주입
-                add(ProtocolMapperRepresentation().apply {
-                    name = "client_id_mapper"
-                    protocol = "openid-connect"
-                    protocolMapper = "oidc-hardcoded-claim-mapper"
-                    config = mapOf(
-                        "claim.name" to "client_id",
-                        "claim.value" to id,
-                        "jsonType.label" to "String",
-                        "id.token.claim" to "true",
-                        "access.token.claim" to "true",
-                        "userinfo.token.claim" to "true"
-                    )
-                })
-                // Client/Role 목록 주입
-                add(ProtocolMapperRepresentation().apply {
-                    name = "group-membership-mapper"
-                    protocol = "openid-connect"
-                    protocolMapper = "oidc-group-membership-mapper"
-                    config = mapOf(
-                        "claim.name" to "groups",
-                        "full.path" to "true",
-                        "jsonType.label" to "String",
-                        "id.token.claim" to "true",
-                        "access.token.claim" to "true",
-                        "userinfo.token.claim" to "true"
-                    )
-                })
-            }
-        })
-    }
-
 }
 
